@@ -12,6 +12,7 @@ function BlogList(props){
   const [selectedBlog, setSelectedBlog] = useState(-1);
   const [blogs, setBlogs] = useState([]);
   const [sortConfig, setSortConfig] = useState({ category: null, order: null });
+  const [keyword, setKeyword] = useState(null);
 
   function onClickDelete(blog) {
     setSelectedBlog(blog);
@@ -24,11 +25,19 @@ function BlogList(props){
   }
 
   function onChangeSortCategory(category) {
-    setSortConfig(sortConfig => ({ ...sortConfig, category }));
+    setSortConfig(sortConfig => { 
+      sortList({ category, order: sortConfig.order });
+
+      return { ...sortConfig, category }; 
+    });
   }
 
   function onChangeSortOrder(order) {
-    setSortConfig(sortConfig => ({ ...sortConfig, order }));
+    setSortConfig(sortConfig => { 
+      sortList({ category: sortConfig.category, order });
+
+      return {...sortConfig, order };
+    });
   }
 
   function onSearch(keyword) {
@@ -47,38 +56,35 @@ function BlogList(props){
       setBlogs([...data]);
   }
 
+  function onChangeSearch(evt) {
+    setKeyword(evt.target.value);
+  }
+
+  function sortList({ category, order }) {
+    const sortedData = [...blogs];
+
+    if(!category || !order) return;
+
+    if(category === 'title') {
+      if(order === 'asc')
+        setBlogs(sortedData.sort((a, b) => a.title.localeCompare(b.title)));
+      else
+        setBlogs(sortedData.sort((a, b) => b.title.localeCompare(a.title)));
+    }
+    else {
+      if(order === 'asc')
+        setBlogs(sortedData.sort((a, b) => a.date_created - b.date_created));
+      else
+        setBlogs(sortedData.sort((a, b) => b.date_created - a.date_created));
+    }
+  }
+
   useEffect(() => {
     setBlogs([...data]);
 
-    console.log('cloning data into list state effect has run');
+    setSortConfig({ category: null, order: null });
+    setKeyword(null);
   }, [data]);
-
-  useEffect(() => {
-    function sortList() {
-      const { category, order } = sortConfig;
-      const sortedData = [...data];
-  
-      if(!category || !order) return;
-
-      if(category === 'title') {
-        if(order === 'asc')
-          setBlogs(sortedData.sort((a, b) => a.title.localeCompare(b.title)));
-        else
-          setBlogs(sortedData.sort((a, b) => b.title.localeCompare(a.title)));
-      }
-      else {
-        if(order === 'asc')
-          setBlogs(sortedData.sort((a, b) => a.date_created - b.date_created));
-        else
-          setBlogs(sortedData.sort((a, b) => b.date_created - a.date_created));
-      }
-    }
-
-    sortList();
-
-    console.log('sorting data effect has run');
-  }, [sortConfig, data]);
-
 
 
   const DeleteAction = (blog) => (
@@ -123,6 +129,7 @@ function BlogList(props){
                 className="action-button"
                 placeholder="Sort By"
                 onChange={onChangeSortCategory}
+                value={sortConfig.category}
               >
                 <Select.Option value="title">
                   <Text type="secondary">Title</Text>
@@ -136,6 +143,7 @@ function BlogList(props){
                 placeholder="Sort Order"
                 onChange={onChangeSortOrder}
                 style={{ marginLeft: 10 }}
+                value={sortConfig.order}
               >
                 <Select.Option value="asc">
                   <Text type="secondary">Asc</Text>
@@ -149,7 +157,9 @@ function BlogList(props){
               <Search 
                 onSearch={onSearch} 
                 onKeyUp={onKeyupSearch} 
+                onChange={onChangeSearch}
                 placeholder="Search a Blog" 
+                value={keyword}
               />
             </Col>
           </Row>

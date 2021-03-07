@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Card } from 'antd';
 
@@ -9,7 +10,11 @@ function BlogForm({ onCreate, onUpdate, onCancelUpdate, blog }){
     formRef.current.resetFields();
 
     if(blog)
-      onUpdate({ id: blog.id, ...formValues });
+      onUpdate({ 
+        id: blog.id, 
+        ...formValues,
+        date_created: moment().toDate()
+      });
     else
       onCreate(formValues);
   }

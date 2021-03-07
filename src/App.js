@@ -1,11 +1,18 @@
 import { useState } from 'react';
+import moment from 'moment';
 import { Layout, Row, Col } from 'antd';
 import BlogForm from './components/form';
 import BlogList from './components/list';
 import BlogDetail from './components/detail';
 
 import './App.css';
-import moment from 'moment';
+
+const layoutProps = {
+  xs: { span: 22, offset: 1 },
+  sm: { span: 22, offset: 1 },
+  md: { span: 22, offset: 1 },
+  lg: { span: 10, offset: 1 }
+};
 
 const { Header, Footer, Content } = Layout;
 
@@ -63,41 +70,6 @@ function App() {
     setBlogs(blogs => blogs.concat(data));
   }
 
-  const HomePage = () => (
-    <Row gutter={12}>
-      <Col span={10} offset={1}>
-        <BlogForm 
-          onCreate={createBlog}
-          onUpdate={updateBlog}
-          onCancelUpdate={clearUpdateBlog}
-          blog={blogEdit}
-          activeDir={activeDir}
-        />
-      </Col>
-      <Col span={10} offset={1}>
-        <BlogList 
-          data={blogs} 
-          onDelete={deleteBlog}
-          onView={viewBlog}
-          onUpdate={prepareUpdateBlog}
-          onPopulate={populateDummyData}
-          onClear={() => setBlogs([])}
-        />
-      </Col>
-    </Row>
-  );
-
-  const BlogPage = () => (
-    <Row gutter={12}>
-      <Col span={10} offset={1}>
-        <BlogDetail 
-          blog={blogView} 
-          onBack={() => setActiveDir('home')}
-        />
-      </Col>
-    </Row>
-  );
-
   return (
     <Layout>
       <Header>Create a Blog</Header>
@@ -105,8 +77,41 @@ function App() {
         <div style={{ marginTop: 20 }}>
           { 
             activeDir === 'home' 
-            ? <HomePage />
-            : <BlogPage />
+            ? 
+              (
+                <Row gutter={[12, 12]}>
+                  <Col {...layoutProps}>
+                    <BlogForm 
+                      onCreate={createBlog}
+                      onUpdate={updateBlog}
+                      onCancelUpdate={clearUpdateBlog}
+                      blog={blogEdit}
+                      activeDir={activeDir}
+                    />
+                  </Col>
+                  <Col {...layoutProps}>
+                    <BlogList 
+                      data={blogs} 
+                      onDelete={deleteBlog}
+                      onView={viewBlog}
+                      onUpdate={prepareUpdateBlog}
+                      onPopulate={populateDummyData}
+                      // onClear={() => setBlogs([])}
+                    />
+                  </Col>
+                </Row>
+              )
+            : 
+              (
+                <Row gutter={12}>
+                  <Col {...layoutProps}>
+                    <BlogDetail 
+                      blog={blogView} 
+                      onBack={() => setActiveDir('home')}
+                    />
+                  </Col>
+                </Row>
+              )
           }
         </div>
       </Content>

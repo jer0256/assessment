@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { List, Card, Typography, Button, Modal, Input, Select } from 'antd';
+import { List, Card, Typography, Button, Modal, Input, Select, Row, Col } from 'antd';
 
 const { Text } = Typography;
 const { Search } = Input;
 
 function BlogList(props){
-  const { data, onDelete, onView, onUpdate, onPopulate, onClear } = props; 
+  const { data, onDelete, onView, onUpdate, onPopulate } = props; 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(-1);
   const [blogs, setBlogs] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ category: null, order: null });
 
   function onClickDelete(blog) {
-    console.log(blog)
     setSelectedBlog(blog);
     setModalVisible(true);
   }
@@ -23,12 +23,12 @@ function BlogList(props){
     setModalVisible(false);
   }
 
-  function onSort(category) {
-    const sortedData = data.sort((a, b) => a[category] - b[category]);
+  function onChangeSortCategory(category) {
+    setSortConfig(sortConfig => ({ ...sortConfig, category }));
+  }
 
-    console.log(sortedData);
-
-    setBlogs(sortedData);
+  function onChangeSortOrder(order) {
+    setSortConfig(sortConfig => ({ ...sortConfig, order }));
   }
 
   function onSearch(keyword) {
@@ -42,11 +42,44 @@ function BlogList(props){
     }));
   }
 
-  useEffect(() => {
-    setBlogs(data);
+  function onKeyupSearch(event) {
+    if(event.target.defaultValue === '')
+      setBlogs([...data]);
+  }
 
-    console.log('list use effect has run');
+  useEffect(() => {
+    setBlogs([...data]);
+
+    console.log('cloning data into list state effect has run');
   }, [data]);
+
+  useEffect(() => {
+    function sortList() {
+      const { category, order } = sortConfig;
+      const sortedData = [...data];
+  
+      if(!category || !order) return;
+
+      if(category === 'title') {
+        if(order === 'asc')
+          setBlogs(sortedData.sort((a, b) => a.title.localeCompare(b.title)));
+        else
+          setBlogs(sortedData.sort((a, b) => b.title.localeCompare(a.title)));
+      }
+      else {
+        if(order === 'asc')
+          setBlogs(sortedData.sort((a, b) => a.date_created - b.date_created));
+        else
+          setBlogs(sortedData.sort((a, b) => b.date_created - a.date_created));
+      }
+    }
+
+    sortList();
+
+    console.log('sorting data effect has run');
+  }, [sortConfig, data]);
+
+
 
   const DeleteAction = (blog) => (
     <Button 
@@ -58,21 +91,20 @@ function BlogList(props){
     </Button>
   );
 
-  const ViewAction = ({ blog }) => (
-    <Button type="link" onClick={() => onView(blog.id)}>
+  const ViewAction = ({ id }) => (
+    <Button type="link" onClick={() => onView(id)}>
       View
     </Button>
   );
 
-  const UpdateAction = ({ blog }) => (
-    <Button type="link" onClick={() => onUpdate(blog.id)}>
+  const UpdateAction = ({ id }) => (
+    <Button type="link" onClick={() => onUpdate(id)}>
       Edit 
     </Button>
   );
 
 
   return (
-    
     <div>
       <Modal
         visible={modalVisible}
@@ -83,36 +115,45 @@ function BlogList(props){
       >
         Do you want to delete <b>{selectedBlog.title}</b>?
       </Modal>
-      <div style={{ marginBottom: 10 }}>
-        <Button 
-          className="action-button"
-          onClick={onPopulate}
-          disabled={data.length >= 50}
-        >
-          Populate
-        </Button>
-        <Button
-          className="action-button"
-          onClick={onClear}
-          style={{ marginLeft: 10 }}
-        >
-          Clear
-        </Button>
-      </div>
       <Card 
         title={(
-          <div>
-            <Select
-              className="action-button"
-              placeholder="Sort By"
-              onChange={onSort}
-            >
-              <Select.Option value="title">Title</Select.Option>
-              <Select.Option value="date_created">Date Created</Select.Option>
-            </Select>
-          </div>
+          <Row gutter={[12, 12]}>
+            <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+              <Select
+                className="action-button"
+                placeholder="Sort By"
+                onChange={onChangeSortCategory}
+              >
+                <Select.Option value="title">
+                  <Text type="secondary">Title</Text>
+                </Select.Option>
+                <Select.Option value="date_created">
+                  <Text type="secondary">Date Created</Text>
+                </Select.Option>
+              </Select>
+              <Select
+                className="action-button"
+                placeholder="Sort Order"
+                onChange={onChangeSortOrder}
+                style={{ marginLeft: 10 }}
+              >
+                <Select.Option value="asc">
+                  <Text type="secondary">Asc</Text>
+                </Select.Option>
+                <Select.Option value="desc">
+                  <Text type="secondary">Desc</Text>
+                </Select.Option>
+              </Select>
+            </Col>
+            <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+              <Search 
+                onSearch={onSearch} 
+                onKeyUp={onKeyupSearch} 
+                placeholder="Search a Blog" 
+              />
+            </Col>
+          </Row>
         )} 
-        extra={<Search onSearch={onSearch} placeholder="Search a Blog" />}
       >
         <List 
           itemLayout="vertical"
@@ -123,7 +164,26 @@ function BlogList(props){
             showSizeChanger: false, 
             hideOnSinglePage: true 
           }}
-          locale={{ emptyText: 'There are no blogs yet..' }}
+          locale={{ 
+            emptyText: (
+              <div>
+                { data.length === 0 ? `There are no blogs yet.. ` : `No result found.`}
+                {
+                  data.length === 0 && (
+                    <div>
+                      <Button 
+                        onClick={onPopulate}
+                        disabled={data.length >= 50}
+                        style={{ marginTop: 10 }}
+                      >
+                        <Text type="secondary">Populate Dummy Data</Text>
+                      </Button>
+                    </div>
+                  )
+                }
+              </div> 
+            ) 
+          }}
           renderItem={(item) => (
             <Card 
               size="small" 
@@ -132,13 +192,13 @@ function BlogList(props){
               style={{ marginTop: 10 }}
               extra={(
                 <div>
-                  <ViewAction blog={item} />
-                  <UpdateAction blog={item} />
-                  <DeleteAction blog={item} />
+                  <ViewAction {...item} />
+                  <UpdateAction {...item} />
+                  <DeleteAction {...item} />
                 </div>
               )}
             >
-              <Text>{item.content} | {item.id}</Text>
+              <Text type="secondary">{item.content}</Text>
               <div style={{ marginTop: 20 }}>
                 <Text type="secondary">{moment(item.date_created).fromNow()}</Text>
               </div>
@@ -160,7 +220,6 @@ BlogList.propTypes = {
   onView: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onPopulate: PropTypes.func.isRequired,
-  onClear: PropTypes.func.isRequired
 };
 
 export default BlogList;

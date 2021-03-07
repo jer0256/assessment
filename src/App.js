@@ -71,15 +71,15 @@ function App() {
   }
 
   return (
-    <Layout>
-      <Header>Create a Blog</Header>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Header></Header>
       <Content>
         <div style={{ marginTop: 20 }}>
           { 
             activeDir === 'home' 
             ? 
               (
-                <Row gutter={[12, 12]}>
+                <Row gutter={[0, 12]}>
                   <Col {...layoutProps}>
                     <BlogForm 
                       onCreate={createBlog}

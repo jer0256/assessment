@@ -40,14 +40,14 @@ function BlogForm({ onCreate, onUpdate, onCancelUpdate, blog }){
         <Form.Item
           label="Title"
           name="title"
-          rules={[{ required: true }]}
+          rules={[{ required: true, whitespace: true }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           label="Content"
           name="content"
-          rules={[{ required: true }]}
+          rules={[{ required: true, whitespace: true }]}
         >
           <Input.TextArea rows={5} />
         </Form.Item>

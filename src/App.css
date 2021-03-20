@@ -1,5 +1,5 @@
 @import '~antd/dist/antd.css';
 
-.action-button {
-  width: 100px;
+body {
+  font-size: 16px;
 }

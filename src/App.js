@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -5,21 +6,18 @@ import {
   Link,
   Redirect
 } from 'react-router-dom';
-import { Layout, Row, Col } from 'antd';
-import { Title, Error404 } from 'components';
-import { ListBlog, SingleBlog, FormBlog } from 'modules/blog';
+import { Error404Page, LoadingPage } from 'modules/Utilities';
+import { Layout } from 'antd';
+import { Title } from 'components';
+import { ROUTE } from 'appconstants/route';
 
 import './App.css';
 
-const { Header, Content } = Layout;
+const BlogHomePage = React.lazy(() => import('modules/Blog/BlogHomePage'));
+const BlogSinglePage = React.lazy(() => import('modules/Blog/BlogSinglePage'));
+const BlogFormPage = React.lazy(() => import('modules/Blog/BlogFormPage'));
 
-const colLayout = {
-  xs: { offset: 1, span: 22 },
-  sm: { offset: 1, span: 22 },
-  md: { offset: 1, span: 16 },
-  lg: { offset: 1, span: 12 },
-  xl: { offset: 1, span: 12 },
-};
+const { Header, Content } = Layout;
 
 function App() {
   return (
@@ -31,34 +29,18 @@ function App() {
           </Link>
         </Header>
         <Content>
-          <Row>
-            <Col {...colLayout}>
-              <Switch>
-                <Route exact path="/">
-                  <Redirect to="/blog" />
-                </Route>
-                <Route exact path="/blog">
-                  {process.env.REACT_APP_API_HOST}
-                  <ListBlog />
-                </Route>
-                <Route exact path="/blog/create">
-                  <FormBlog action="create" />
-                </Route>
-                <Route exact path="/blog/:id">
-                  <SingleBlog />
-                </Route>
-                <Route exact path="/blog/edit/:id">
-                  <FormBlog action="update" />
-                </Route>
-                <Route path="/invalid">
-                  <Error404 />
-                </Route>
-                <Route path="*">
-                  <Error404 />
-                </Route>
-              </Switch>
-            </Col>
-          </Row>
+          <React.Suspense fallback={<LoadingPage />}>
+            <Switch>
+              <Route exact path={ROUTE.HOME}>
+                <Redirect to={ROUTE.BLOG_HOME_PAGE} />
+              </Route>
+              <Route exact path={ROUTE.BLOG_HOME_PAGE} component={BlogHomePage} /> 
+              <Route exact path={ROUTE.BLOG_SINGLE_PAGE} component={BlogSinglePage} /> 
+              <Route exact path={ROUTE.BLOG_CREATE_PAGE} component={() => <BlogFormPage type="CREATE_BLOG" />} />
+              <Route exact path={ROUTE.BLOG_EDIT_PAGE} component={() => <BlogFormPage type="EDIT_BLOG" />} />
+              <Route path="*" component={Error404Page} />
+            </Switch>
+          </React.Suspense>
         </Content>
       </Layout>
     </Router>

@@ -1,35 +1,26 @@
 import { Pagination as AntdPagination, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllBlog } from 'api';
-import { ERROR_MESSAGE } from 'globals/constant';
-import { 
-  updateCurrentPage, 
-  updateLoading, 
-  updateTotalItems, 
-  updateItems 
-} from 'redux/slices/blog'
+import { ERROR_MESSAGE } from 'appconstants/message';
+import { setItemsByPagination } from 'redux/slices/blogSlice';
 
 
 function Pagination() {
-  const { currentPage, totalItems } = useSelector((state) => state.blog);
+  const { currentPage, itemTotal, itemPerPage } = useSelector((state) => state.blog);
   const dispatch = useDispatch();
-  const itemPerPage = 10;
 
   async function onChange(page) {
-    dispatch(updateLoading(true));
-
     const data = await getAllBlog({
       page: page,
-      itemCount: itemPerPage
+      items: itemPerPage
     });
 
-    dispatch(updateLoading(false));
-    
-
     if(data) {
-      dispatch(updateItems(data.items));
-      dispatch(updateTotalItems(data.total));
-      dispatch(updateCurrentPage(page));
+      dispatch(setItemsByPagination({
+        currentPage: page,
+        items: data.items,
+        itemTotal: data.total
+      }));
     }
     else {
       message.error(ERROR_MESSAGE);
@@ -39,9 +30,12 @@ function Pagination() {
   return (
     <div>
       <AntdPagination 
+        responsive
+        hideOnSinglePage
         current={currentPage}
-        total={totalItems} 
+        total={itemTotal} 
         showSizeChanger={false}
+        pageSize={itemPerPage}
         onChange={onChange}
       />
     </div>

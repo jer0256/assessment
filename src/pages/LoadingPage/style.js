@@ -1,0 +1,13 @@
+import style from 'styled-components';
+import { silverColor } from 'app-style';
+
+export const CenteredContainer = style.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  align-content: space-between;
+  height: calc(100vh - 150px);
+  color: ${silverColor};
+`;
+

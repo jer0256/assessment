@@ -3,58 +3,96 @@ import { createSlice } from '@reduxjs/toolkit';
 const blogSlice = createSlice({
   name: 'blog',
   initialState: {
-    currentAction: null,
-    currentPage: 1,
-    currentItem: {
+    singleItem: {
       title: null,
       content: null,
       date_created: null
     },
-    itemTotal: 0,
-    itemPerPage: 10,
-    items: [],
-    cachedKeyword: null,
-    updateSuccess: false,
-    createSuccess: false,
+    searchedItems: {
+      items: [],
+      itemTotal: 0,
+      itemPerPage: 10,
+    },
+    allItems: {
+      items: [],
+      itemTotal: 0,
+      itemPerPage: 10,
+      currentPage: 1,
+    },
+    actionStatus: {
+      isUpdateSuccess: false,
+      isCreateSuccess: false,
+    },
   },
   reducers: {
-    setItems: (state, action) => {
-      state.items = action.payload.items;
-      state.itemTotal = action.payload.itemTotal;
+    fetchAllItems: () => {},
+    fetchSingleItem: () => {},
+    fetchAllItemsPagination: () => {},
+    searchItems: () => {},
+    updateItem: () => {},
+    createItem: () => {},
+    fetchAllItemsSuccess: (state, action) => {
+      state.allItems.items = action.payload.items;
+      state.allItems.itemTotal = action.payload.itemTotal;
     },
-    setItemsByPagination: (state, action) => {
-      state.currentPage = action.payload.currentPage;
-      state.items = action.payload.items;
-      state.itemTotal = action.payload.itemTotal;
+    fetchSingleItemSuccess: (state, action) => {
+      state.singleItem = action.payload;
     },
-    searchItems: (state, action) => {
-      state.items = action.payload.items;
-      state.itemTotal = action.payload.itemTotal;
-      state.cachedKeyword = action.payload.keyword;
+    fetchAllItemsPaginationSuccess: (state, action) => {
+      state.allItems.currentPage = action.payload.currentPage;
+      state.allItems.items = action.payload.items;
+      state.allItems.itemTotal = action.payload.itemTotal;
     },
-    setCurrentItem: (state, action) => {
-      state.currentItem = action.payload;
+    searchItemsSuccess: (state, action) => {
+      state.searchedItems.items = action.payload.items;
+      state.searchedItems.itemTotal = action.payload.itemTotal;
     },
-    setCurrentAction: (state, action) => {
-      state.currentAction = action.payload;
+    updateItemSuccess: (state, action) => {
+      state.actionStatus.isUpdateSuccess = action.payload.isSuccess;
     },
-    setUpdateSuccess: (state, action) => {
-      state.updateSuccess = action.payload
+    createItemSuccess: (state, action) => {
+      state.actionStatus.isCreateSuccess = action.payload.isSuccess;
     },
-    setCreateSuccess: (state, action) => {
-      state.createSuccess = action.payload
+    resetAllItems: (state, action) => {
+      state.allItems = {
+        items: [],
+        itemTotal: 0,
+        itemPerPage: 10,
+        currentPage: 1,
+      };
     },
+    resetSingleItem: (state, action) => {
+      state.singleItem = {
+        title: null,
+        content: null,
+        date_created: null
+      };
+    },
+    resetActionStatus: (state, action) => {
+      state.actionStatus = {
+        isUpdateSuccess: false,
+        isCreateSuccess: false,
+      }
+    }
   }
 })
 
 export const { 
-  setItemsByPagination, 
-  setItems,
+  fetchAllItems,
+  fetchSingleItem,
+  fetchAllItemsPagination,
   searchItems,
-  setCurrentItem,
-  setCurrentAction,
-  setUpdateSuccess,
-  setCreateSuccess
+  updateItem,
+  createItem,
+  fetchAllItemsPaginationSuccess,
+  fetchAllItemsSuccess,
+  searchItemsSuccess,
+  fetchSingleItemSuccess,
+  updateItemSuccess,
+  createItemSuccess,
+  resetAllItems,
+  resetSingleItem,
+  resetActionStatus
 } = blogSlice.actions;
 
 export default blogSlice.reducer;

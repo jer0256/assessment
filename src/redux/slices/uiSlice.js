@@ -8,11 +8,11 @@ const uiSlice = createSlice({
     }
   },
   reducers: {
-    startAction: (state, payload) => {
-      state.loader = [...state.loader, payload];
+    startAction: (state, action) => {
+      state.loader.actions = [...state.loader.actions, action.payload];
     },
-    stopAction: (state, payload) => {
-      state.loader = state.loader.filter(i => i !== payload);
+    stopAction: (state, action) => {
+      state.loader.actions = state.loader.actions.filter(i => i !== action.payload);
     }
   }, 
 });

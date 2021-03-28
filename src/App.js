@@ -6,8 +6,8 @@ import {
   Link,
   Redirect
 } from 'react-router-dom';
-import Error404Page from 'pages/Error404Page';
-import ErrorCrashPage from 'pages/ErrorCrashPage';
+import Error404Page from 'components/Error404';
+import ErrorCrashPage from 'containers/ErrorCrashPage';
 import { Layout } from 'antd';
 import { Title } from 'app-style';
 import { ROUTE } from 'app-constants/route';
@@ -15,11 +15,11 @@ import ErrorHandler from 'components/ErrorHandler';
 
 import './App.css';
 
-const BlogHomePage = React.lazy(() => import('pages/BlogHomePage'));
-const BlogSinglePage = React.lazy(() => import('pages/BlogSinglePage'));
-const BlogEditPage = React.lazy(() => import('pages/BlogEditPage'));
-const BlogCreatePage = React.lazy(() => import('pages/BlogCreatePage'));
-const BlogSearchPage = React.lazy(() => import('pages/BlogSearchPage'));
+const BlogHomePage = React.lazy(() => import('containers/BlogHomePage'));
+const BlogSinglePage = React.lazy(() => import('containers/BlogSinglePage'));
+const BlogEditPage = React.lazy(() => import('containers/BlogEditPage'));
+const BlogCreatePage = React.lazy(() => import('containers/BlogCreatePage'));
+const BlogSearchPage = React.lazy(() => import('containers/BlogSearchPage'));
 
 const { Header, Content } = Layout;
 

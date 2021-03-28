@@ -1,7 +1,7 @@
 import { Container, SecondaryTitle, SecondaryText } from 'app-style';
-import { NoResultIcon } from './style';
+import { NoResultIcon } from '../style';
 
-function NoResult(){
+function EmptyResult(){
   return (
     <Container align="center" margin={50}>
       <Container>
@@ -17,4 +17,4 @@ function NoResult(){
   );
 }
 
-export default NoResult;
+export default EmptyResult;

@@ -1,18 +1,16 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-export default function useBlogFormHook(formRef, action) {
+export default function useBlogFormHook(formRef, action, blog) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { singleItem } = useSelector(state => state.blog);
   
-
   useEffect(() => {
-    if(singleItem)
-      formRef.current.setFieldsValue(singleItem)
+    if(blog)
+      formRef.current.setFieldsValue(blog)
 
-  }, [formRef, singleItem]);
+  }, [formRef, blog]);
 
 
   function onSubmit(formValues) {

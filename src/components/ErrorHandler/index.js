@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { ROUTE } from 'app-constants';
+import { ROUTE } from 'app-constants/route';
 
 class ErrorHandler extends React.Component{
   componentDidCatch() {

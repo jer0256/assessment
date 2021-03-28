@@ -1,6 +1,6 @@
 import { Container, LoadingIcon } from 'app-style';
 import { Row, Col, Card } from 'antd';
-import { LAYOUT } from 'app-constants';
+import { LAYOUT } from 'app-constants/layout';
 
 function Loader() {
   return (

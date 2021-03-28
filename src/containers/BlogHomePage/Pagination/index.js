@@ -4,8 +4,8 @@ import { fetchAllItemsPagination } from 'redux/slices/blogSlice';
 
 
 function Pagination() {
-  const { allItems } = useSelector((state) => state.blog);
-  const { currentPage, itemTotal, itemPerPage } = allItems;
+  const { allBlogs } = useSelector((state) => state.blog);
+  const { currentPage, itemTotal, itemPerPage } = allBlogs;
   const dispatch = useDispatch();
 
   async function onChange(page) {

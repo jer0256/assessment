@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {  Input } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { Container } from 'app-style';
-import { ROUTE } from 'app-constants';
+import { ROUTE } from 'app-constants/route';
 
 const { Search } = Input;
 
@@ -11,7 +11,7 @@ function SearchForm() {
   const [keyword, setKeyword] = useState(null);
 
   async function onSearch(value) {
-    history.push(`${ROUTE.BLOG_SEARCH_PAGE}?q=${keyword}`)
+    history.push(`${ROUTE.BLOG_SEARCH_PAGE}?q=${value}`)
   }
 
   return (

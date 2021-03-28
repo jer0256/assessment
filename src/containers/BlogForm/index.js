@@ -5,9 +5,9 @@ import { Container } from 'app-style';
 import { VALIDATION_RULES } from './validation';
 import useBlogFormHook from './hook';
 
-function BlogForm({ title, buttonLabel, action }) {
+function BlogForm({ title, buttonLabel, action, blog }) {
   const formRef = useRef();
-  const { onSubmit, onCancel } = useBlogFormHook(formRef, action);
+  const { onSubmit, onCancel } = useBlogFormHook(formRef, action, blog);
 
   return (
     <Card title={title}>
@@ -57,6 +57,10 @@ BlogForm.propTypes = {
   title: PropTypes.string.isRequired, 
   buttonLabel: PropTypes.string.isRequired,
   action: PropTypes.func.isRequired,
+  blog: PropTypes.shape({
+    title: PropTypes.string,
+    Content: PropTypes.string
+  }),
 };
 
 export default BlogForm;

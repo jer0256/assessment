@@ -6,7 +6,7 @@ import { fetchSingleItem, updateItem, resetActionStatus } from 'redux/slices/blo
 export default function useBlogEditPageHook() {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { actionStatus } = useSelector((state) => state.blog);
+  const { actionStatus, singleBlog } = useSelector((state) => state.blog);
 
   useEffect(() => {
     if(id) 
@@ -23,6 +23,7 @@ export default function useBlogEditPageHook() {
   }
 
   return { 
+    blog: singleBlog,
     isUpdateSuccess: actionStatus.isUpdateSuccess,
     updateBlog 
   };

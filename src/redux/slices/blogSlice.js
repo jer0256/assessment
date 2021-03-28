@@ -3,17 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const blogSlice = createSlice({
   name: 'blog',
   initialState: {
-    singleItem: {
+    singleBlog: {
       title: null,
       content: null,
       date_created: null
     },
-    searchedItems: {
+    searchedBlogs: {
       items: [],
       itemTotal: 0,
       itemPerPage: 10,
     },
-    allItems: {
+    allBlogs: {
       items: [],
       itemTotal: 0,
       itemPerPage: 10,
@@ -32,20 +32,20 @@ const blogSlice = createSlice({
     updateItem: () => {},
     createItem: () => {},
     fetchAllItemsSuccess: (state, action) => {
-      state.allItems.items = action.payload.items;
-      state.allItems.itemTotal = action.payload.itemTotal;
+      state.allBlogs.items = action.payload.items;
+      state.allBlogs.itemTotal = action.payload.itemTotal;
     },
     fetchSingleItemSuccess: (state, action) => {
-      state.singleItem = action.payload;
+      state.singleBlog = action.payload;
     },
     fetchAllItemsPaginationSuccess: (state, action) => {
-      state.allItems.currentPage = action.payload.currentPage;
-      state.allItems.items = action.payload.items;
-      state.allItems.itemTotal = action.payload.itemTotal;
+      state.allBlogs.currentPage = action.payload.currentPage;
+      state.allBlogs.items = action.payload.items;
+      state.allBlogs.itemTotal = action.payload.itemTotal;
     },
     searchItemsSuccess: (state, action) => {
-      state.searchedItems.items = action.payload.items;
-      state.searchedItems.itemTotal = action.payload.itemTotal;
+      state.searchedBlogs.items = action.payload.items;
+      state.searchedBlogs.itemTotal = action.payload.itemTotal;
     },
     updateItemSuccess: (state, action) => {
       state.actionStatus.isUpdateSuccess = action.payload.isSuccess;
@@ -54,7 +54,7 @@ const blogSlice = createSlice({
       state.actionStatus.isCreateSuccess = action.payload.isSuccess;
     },
     resetAllItems: (state, action) => {
-      state.allItems = {
+      state.allBlogs = {
         items: [],
         itemTotal: 0,
         itemPerPage: 10,
@@ -62,7 +62,7 @@ const blogSlice = createSlice({
       };
     },
     resetSingleItem: (state, action) => {
-      state.singleItem = {
+      state.singleBlog = {
         title: null,
         content: null,
         date_created: null

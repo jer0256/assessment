@@ -13,7 +13,7 @@ import {
   createItem,
   createItemSuccess
 } from 'redux/slices/blogSlice';
-import { startAction, stopAction } from 'redux/slices/uiSlice';
+import { startAction, stopAction, displayErrorModal } from 'redux/slices/uiSlice';
 import BlogAPI from 'api/BlogAPI';
 
 
@@ -30,7 +30,7 @@ function* handleFetchAllBlogPaginationSaga({ type, payload }) {
     }));
   }
   catch(error) {
-    console.log(error)
+    yield put(displayErrorModal());
   }
   finally {
     yield put(stopAction(type));
@@ -49,7 +49,7 @@ function* handleSearchBlogSaga({ type, payload }) {
     }));
   }
   catch(error) {
-    console.log(error)
+    yield put(displayErrorModal());
   }
   finally {
     yield put(stopAction(type));
@@ -69,7 +69,7 @@ function* handleFetchSingleSaga({ type, payload }) {
     }));
   }
   catch(error) {
-    console.log(error)
+    yield put(displayErrorModal());
   }
   finally {
     yield put(stopAction(type));
@@ -88,7 +88,7 @@ function* handleFetchAllSaga({ type, payload }) {
     }));
   }
   catch(error) {
-    console.log(error)
+    yield put(displayErrorModal());
   }
   finally {
     yield put(stopAction(type)) 
@@ -103,7 +103,7 @@ function* handleUpdateItemSaga({ type, payload }) {
     yield put(updateItemSuccess({ isSuccess: true }));
   }
   catch(error) {
-    console.log(error)
+    yield put(displayErrorModal());
   }
   finally {
     yield put(stopAction(type)) 
@@ -119,7 +119,7 @@ function* handleCreateItemSaga({ type, payload }) {
     yield put(createItemSuccess({ isSuccess: true }));
   }
   catch(error) {
-    console.log(error)
+    yield put(displayErrorModal());
   }
   finally {
     yield put(stopAction(type)) 

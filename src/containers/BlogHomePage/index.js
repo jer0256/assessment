@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
 import { Card, Row, Col } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { LAYOUT } from 'app-constants';
+import { LAYOUT } from 'app-constants/layout';
 import { fetchAllItems, resetAllItems } from 'redux/slices/blogSlice';
 import { Container } from 'app-style';
+import BlogList from './BlogList';
 import SearchForm from './SearchForm';
 import Pagination from './Pagination';
-import BlogList from './BlogList.js';
+
 
 
 function BlogHomePage() {
   const dispatch = useDispatch();
-  const { allItems } = useSelector(state => state.blog);
+  const { allBlogs } = useSelector(state => state.blog);
 
   useEffect(() => {
     dispatch(fetchAllItems());
@@ -22,7 +23,6 @@ function BlogHomePage() {
       dispatch(resetAllItems());
     }
   }, [dispatch]);
-
 
   return (
     <Row>
@@ -35,7 +35,7 @@ function BlogHomePage() {
                 <Pagination />
               </Container>
               <Container margin={{ top: 20 }}>
-                <BlogList items={allItems.items} />
+                <BlogList items={allBlogs.items} />
               </Container>
             </Card>
           </Container>

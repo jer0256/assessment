@@ -1,0 +1,26 @@
+
+.modal-root {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, .45);
+  height: 100%;
+  width: 100%;
+}
+
+
+.modal-container {
+  position: absolute;
+  background-color: white;
+  padding: 20px;
+  border-radius: 2px;
+  width: 450px;
+  max-width: calc(100vw - 32px);
+}

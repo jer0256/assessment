@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Result, Button, Card } from 'antd';
 import { useHistory } from 'react-router-dom';
-import { ROUTE } from 'app-constants';
+import { ROUTE } from 'app-constants/route';
 
 function BlogFormResult({ title, subTitle }) {
   const history = useHistory();
